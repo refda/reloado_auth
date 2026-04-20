@@ -1,0 +1,49 @@
+# Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+*.g.dart
+*.freezed.dart
+
+# Android signing — never commit these
+android/key.properties
+android/app/*.jks
+android/app/*.keystore
+*.jks
+*.keystore
+
+# Android
+android/.gradle/
+android/local.properties
+android/captures/
+android/generatedDebugSources/
+android/app/debug/
+android/app/profile/
+android/app/release/
+
+# IntelliJ / Android Studio
+*.iml
+.idea/
+*.ipr
+*.iws
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Dart/Pub
+.pub-cache/
+.pub/
+pubspec.lock
+
+# iOS (not relevant for F-Droid but good practice)
+ios/.symlinks/
+ios/Pods/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+
+# Misc
+*.log
+*.tmp
