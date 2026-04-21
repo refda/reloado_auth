@@ -7,7 +7,7 @@ A secure, open-source 2FA (TOTP) authenticator for Android.
 - TOTP code generation (RFC 6238 compatible)
 - QR code scanning to add accounts
 - Biometric lock (fingerprint / face unlock)
-- Encrypted local storage — no cloud sync, no tracking
+- Encrypted local storage — optional cloud sync
 - German and English UI
 
 ## Privacy
