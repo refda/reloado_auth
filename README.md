@@ -12,7 +12,7 @@ A secure, open-source 2FA (TOTP) authenticator for Android.
 
 ## Privacy
 
-This app stores all data locally on your device using encrypted storage. It does not connect to any external server and does not collect any data.
+This app stores all data locally on your device using encrypted storage. Optional E2EE cloud sync.
 
 ## Build
 
@@ -36,4 +36,4 @@ If `key.properties` is absent (e.g. F-Droid builds), the app builds with the deb
 
 ## License
 
-[MIT](LICENSE)
+[GNU AFFERO GENERAL PUBLIC LICENSE](LICENSE)
