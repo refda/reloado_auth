@@ -1,0 +1,8 @@
+Reloado Auth is an open-source TOTP authenticator for Android.
+
+Features:
+* Generate TOTP codes compatible with Google, GitHub, and any RFC 6238 service
+* Scan QR codes to add accounts instantly
+* Biometric lock — protect your codes with fingerprint or face unlock
+* All data stored with encrypted storage
+* Available in English and German

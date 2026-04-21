@@ -1,0 +1,1 @@
+Secure 2FA TOTP authenticator with biometric lock and encrypted storage.
