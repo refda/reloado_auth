@@ -642,7 +642,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (showAdvanced) ...[
                 Row(children: [
                   Expanded(child: DropdownButtonFormField<String>(
-                    initialValue: algorithm,
+                    value: algorithm,
                     decoration: InputDecoration(labelText: loc.algorithm),
                     items: ['SHA1', 'SHA256', 'SHA512'].map((v) =>
                         DropdownMenuItem(value: v, child: Text(v))).toList(),
@@ -650,7 +650,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   )),
                   const SizedBox(width: 8),
                   Expanded(child: DropdownButtonFormField<String>(
-                    initialValue: digits,
+                    value: digits,
                     decoration: InputDecoration(labelText: loc.digits),
                     items: ['6', '8'].map((v) =>
                         DropdownMenuItem(value: v, child: Text(v))).toList(),
@@ -658,7 +658,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   )),
                   const SizedBox(width: 8),
                   Expanded(child: DropdownButtonFormField<String>(
-                    initialValue: period,
+                    value: period,
                     decoration: InputDecoration(labelText: loc.periodSec),
                     items: ['30', '60'].map((v) =>
                         DropdownMenuItem(value: v, child: Text(v))).toList(),
