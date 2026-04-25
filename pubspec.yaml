@@ -20,7 +20,7 @@ dependencies:
   encrypt: ^5.0.3
   crypto: ^3.0.5
   shared_preferences: ^2.3.5
-  mobile_scanner: ^6.0.0
+  mobile_scanner: ^7.0.0
   flutter_svg: ^2.0.10+1
 
 dev_dependencies:
