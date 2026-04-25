@@ -6,13 +6,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:reloado_auth/l10n/app_localizations.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:local_auth_android/local_auth_android.dart';
-import 'package:local_auth_darwin/local_auth_darwin.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:encrypt/encrypt.dart' as enc;
 import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:flutter_zxing/flutter_zxing.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'service_icons.dart';
 
@@ -135,9 +134,6 @@ class _BiometricWrapperState extends State<BiometricWrapper> {
           AndroidAuthMessages(
             signInTitle: loc.biometricTitle,
             biometricHint: loc.biometricHint,
-            cancelButton: loc.cancel,
-          ),
-          IOSAuthMessages(
             cancelButton: loc.cancel,
           ),
         ],
@@ -707,7 +703,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // ── QR Scanner ──
   void _showQrScanner({int? editIndex}) {
-    final ctrl = MobileScannerController(detectionSpeed: DetectionSpeed.normal);
     bool scanned = false;
 
     showModalBottomSheet(
@@ -716,11 +711,10 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (ctx) => SizedBox(
         height: MediaQuery.of(ctx).size.height * 0.6,
         child: Stack(children: [
-          MobileScanner(
-            controller: ctrl,
-            onDetect: (capture) {
-              if (scanned) return;
-              final raw = capture.barcodes.firstOrNull?.rawValue ?? '';
+          ReaderWidget(
+            onScan: (code) {
+              if (scanned || !code.isValid || code.text == null) return;
+              final raw = code.text!;
               if (raw.startsWith('otpauth://')) {
                 scanned = true;
                 final parsed = _parseOtpAuth(raw);
@@ -755,7 +749,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ]),
       ),
-    ).whenComplete(() => ctrl.dispose());
+    );
   }
 
   // ── Cloud menu ──
