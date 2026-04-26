@@ -39,21 +39,19 @@ jobs:
           storeFile=$GITHUB_WORKSPACE/android/release.jks
           EOF
 
+      - name: Normalize build path
+        run: ln -s $GITHUB_WORKSPACE /tmp/build
+
       - name: Install dependencies and patch CMakeLists
+        working-directory: /tmp/build
         run: |
-          mv $GITHUB_WORKSPACE /tmp/build
-          cd /tmp/build
-          flutter pub get --enforce-lockfile
+          flutter pub get
           sed -i -e '1a add_link_options("LINKER:--build-id=none")' \
             ~/.pub-cache/hosted/pub.dev/flutter_zxing-*/*/CMakeLists.txt
-          mv /tmp/build $GITHUB_WORKSPACE
 
       - name: Build APK
-        run: |
-          mv $GITHUB_WORKSPACE /tmp/build
-          cd /tmp/build
-          flutter build apk --release --split-per-abi
-          mv /tmp/build $GITHUB_WORKSPACE
+        working-directory: /tmp/build
+        run: flutter build apk --release --split-per-abi
 
       - name: Re-align APKs
         run: |
