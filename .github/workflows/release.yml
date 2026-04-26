@@ -55,10 +55,10 @@ jobs:
 
       - name: Re-align APKs
         run: |
-          pip install reproducible-apk-tools
+          git clone --depth 1 --branch v0.3.0 https://github.com/obfusk/reproducible-apk-tools.git /tmp/rat
           for apk in $GITHUB_WORKSPACE/build/app/outputs/flutter-apk/app-*-release.apk; do
             mv "$apk" unaligned.apk
-            zipalign.py --page-size 16 --pad-like-apksigner --replace unaligned.apk "$apk"
+            python /tmp/rat/zipalign.py --page-size 16 --pad-like-apksigner --replace unaligned.apk "$apk"
           done
 
       - name: Upload release assets
