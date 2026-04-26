@@ -36,7 +36,6 @@ android/app/release/
 # Dart/Pub
 .pub-cache/
 .pub/
-pubspec.lock
 
 # iOS (not relevant for F-Droid but good practice)
 ios/.symlinks/
