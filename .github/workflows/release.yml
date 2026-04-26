@@ -7,11 +7,22 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install NDK and CMake
+        run: |
+          echo "y" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \
+            "ndk;27.0.12077973" \
+            "cmake;3.22.1"
 
       - uses: subosito/flutter-action@v2
         with:
@@ -30,6 +41,11 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+
+      - name: Patch CMakeLists for reproducible builds
+        run: |
+          sed -i -e '1a add_link_options("LINKER:--build-id=none")' \
+            ~/.pub-cache/hosted/pub.dev/flutter_zxing-*/*/CMakeLists.txt
 
       - name: Build APK
         run: flutter build apk --release --split-per-abi
