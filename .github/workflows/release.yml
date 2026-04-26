@@ -39,16 +39,29 @@ jobs:
           storeFile=$GITHUB_WORKSPACE/android/release.jks
           EOF
 
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Patch CMakeLists for reproducible builds
+      - name: Install dependencies and patch CMakeLists
         run: |
+          mv $GITHUB_WORKSPACE /tmp/build
+          cd /tmp/build
+          flutter pub get --enforce-lockfile
           sed -i -e '1a add_link_options("LINKER:--build-id=none")' \
             ~/.pub-cache/hosted/pub.dev/flutter_zxing-*/*/CMakeLists.txt
+          mv /tmp/build $GITHUB_WORKSPACE
 
       - name: Build APK
-        run: flutter build apk --release --split-per-abi
+        run: |
+          mv $GITHUB_WORKSPACE /tmp/build
+          cd /tmp/build
+          flutter build apk --release --split-per-abi
+          mv /tmp/build $GITHUB_WORKSPACE
+
+      - name: Re-align APKs
+        run: |
+          pip install reproducible-apk-tools
+          for apk in $GITHUB_WORKSPACE/build/app/outputs/flutter-apk/app-*-release.apk; do
+            mv "$apk" unaligned.apk
+            zipalign.py --page-size 16 --pad-like-apksigner --replace unaligned.apk "$apk"
+          done
 
       - name: Upload release assets
         uses: softprops/action-gh-release@v2
