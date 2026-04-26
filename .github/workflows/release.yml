@@ -29,15 +29,8 @@ jobs:
           flutter-version: '3.29.3'
           channel: 'stable'
 
-      - name: Set up signing
-        run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > $GITHUB_WORKSPACE/android/release.jks
-          cat > $GITHUB_WORKSPACE/android/key.properties << EOF
-          storePassword=${{ secrets.STORE_PASSWORD }}
-          keyPassword=${{ secrets.KEY_PASSWORD }}
-          keyAlias=${{ secrets.KEY_ALIAS }}
-          storeFile=$GITHUB_WORKSPACE/android/release.jks
-          EOF
+      - name: Decode keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > $GITHUB_WORKSPACE/android/release.jks
 
       - name: Normalize build path
         run: ln -s $GITHUB_WORKSPACE /tmp/build
@@ -49,7 +42,7 @@ jobs:
           sed -i -e '1a add_link_options("LINKER:--build-id=none")' \
             ~/.pub-cache/hosted/pub.dev/flutter_zxing-*/*/CMakeLists.txt
 
-      - name: Build APK
+      - name: Build APK (unsigned)
         working-directory: /tmp/build
         run: flutter build apk --release --split-per-abi
 
@@ -59,6 +52,18 @@ jobs:
           for apk in $GITHUB_WORKSPACE/build/app/outputs/flutter-apk/app-*-release.apk; do
             mv "$apk" unaligned.apk
             python /tmp/rat/zipalign.py --page-size 16 --pad-like-apksigner --replace unaligned.apk "$apk"
+          done
+
+      - name: Sign APKs
+        run: |
+          BUILD_TOOLS=$(ls -d $ANDROID_SDK_ROOT/build-tools/*/ | sort -V | tail -1)
+          for apk in $GITHUB_WORKSPACE/build/app/outputs/flutter-apk/app-*-release.apk; do
+            ${BUILD_TOOLS}apksigner sign \
+              --ks $GITHUB_WORKSPACE/android/release.jks \
+              --ks-pass "pass:${{ secrets.STORE_PASSWORD }}" \
+              --key-pass "pass:${{ secrets.KEY_PASSWORD }}" \
+              --ks-key-alias "${{ secrets.KEY_ALIAS }}" \
+              "$apk"
           done
 
       - name: Upload release assets
