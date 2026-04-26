@@ -33,7 +33,9 @@ jobs:
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > $GITHUB_WORKSPACE/android/release.jks
 
       - name: Normalize build path
-        run: ln -s $GITHUB_WORKSPACE /tmp/build
+        run: |
+          mv $GITHUB_WORKSPACE /tmp/build
+          ln -s /tmp/build $GITHUB_WORKSPACE
 
       - name: Install dependencies and patch CMakeLists
         working-directory: /tmp/build
