@@ -702,61 +702,24 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // ── QR Scanner ──
-  void _showQrScanner({int? editIndex}) {
-    bool scanned = false;
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (ctx) => SizedBox(
-        height: MediaQuery.of(ctx).size.height * 0.85,
-        child: ClipRect(
-          child: Stack(children: [
-            Positioned.fill(
-              child: ReaderWidget(
-                codeFormat: Format.qrCode,
-                tryHarder: true,
-                scanDelay: const Duration(milliseconds: 500),
-                onScan: (code) {
-                  if (scanned) return;
-                  final raw = code.text;
-                  if (raw == null || raw.isEmpty) return;
-                  if (!raw.startsWith('otpauth://')) return;
-                  scanned = true;
-                  final parsed = _parseOtpAuth(raw);
-                  if (parsed.isNotEmpty) {
-                    if (editIndex != null) {
-                      tokens[editIndex] = parsed;
-                      _saveLocalTokens();
-                    } else {
-                      tokens.add(parsed);
-                      _saveLocalTokens();
-                    }
-                  }
-                  Navigator.pop(ctx);
-                },
-              ),
-            ),
-            Positioned(
-              top: 12, right: 12,
-              child: IconButton(
-                icon: const Icon(Icons.close, color: Colors.white),
-                onPressed: () => Navigator.pop(ctx),
-              ),
-            ),
-            Positioned(
-              bottom: 24, left: 0, right: 0,
-              child: Center(
-                child: Text(
-                  AppLocalizations.of(context)!.scanQrCode,
-                  style: const TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ),
-            ),
-          ]),
-        ),
+  Future<void> _showQrScanner({int? editIndex}) async {
+    final raw = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (_) => const _QrScannerScreen(),
       ),
     );
+    if (raw == null || !mounted) return;
+    final parsed = _parseOtpAuth(raw);
+    if (parsed.isNotEmpty) {
+      if (editIndex != null) {
+        tokens[editIndex] = parsed;
+      } else {
+        tokens.add(parsed);
+      }
+      _saveLocalTokens();
+    }
   }
 
   // ── Cloud menu ──
@@ -893,6 +856,45 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showEntryDialog(),
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+// ──────────────────────────────────────────────
+// QR Scanner full-screen page
+// ──────────────────────────────────────────────
+class _QrScannerScreen extends StatefulWidget {
+  const _QrScannerScreen();
+  @override
+  State<_QrScannerScreen> createState() => _QrScannerScreenState();
+}
+
+class _QrScannerScreenState extends State<_QrScannerScreen> {
+  bool _scanned = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: Text(loc.scanQrCode, style: const TextStyle(color: Colors.white)),
+      ),
+      body: ReaderWidget(
+        codeFormat: Format.qrCode,
+        tryHarder: true,
+        scanDelay: const Duration(milliseconds: 500),
+        onScan: (code) {
+          if (_scanned) return;
+          final raw = code.text;
+          if (raw == null || raw.isEmpty) return;
+          if (!raw.startsWith('otpauth://')) return;
+          setState(() => _scanned = true);
+          Navigator.pop(context, raw);
+        },
       ),
     );
   }
