@@ -888,6 +888,10 @@ class _QrScannerScreenState extends State<_QrScannerScreen> {
         tryHarder: true,
         scanDelay: const Duration(milliseconds: 500),
         onScan: (code) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Scanned: ${code.text ?? "null"} valid=${code.isValid}'),
+            duration: const Duration(seconds: 3),
+          ));
           if (_scanned) return;
           final raw = code.text;
           if (raw == null || raw.isEmpty) return;
