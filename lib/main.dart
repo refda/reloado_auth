@@ -886,7 +886,10 @@ class _QrScannerScreenState extends State<_QrScannerScreen> {
       body: ReaderWidget(
         codeFormat: Format.qrCode,
         tryHarder: true,
-        scanDelay: const Duration(milliseconds: 500),
+        tryRotate: true,
+        scanDelay: const Duration(milliseconds: 100),
+        scanDelaySuccess: const Duration(milliseconds: 1000),
+        cropPercent: 1.0,
         onScan: (code) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Scanned: ${code.text ?? "null"} valid=${code.isValid}'),
