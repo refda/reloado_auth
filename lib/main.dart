@@ -714,23 +714,26 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Stack(children: [
             Positioned.fill(
               child: ReaderWidget(
+                codeFormat: Format.qrCode,
+                tryHarder: true,
+                scanDelay: const Duration(milliseconds: 500),
                 onScan: (code) {
-                  if (scanned || !code.isValid || code.text == null) return;
-                  final raw = code.text!;
-                  if (raw.startsWith('otpauth://')) {
-                    scanned = true;
-                    final parsed = _parseOtpAuth(raw);
-                    if (parsed.isNotEmpty) {
-                      if (editIndex != null) {
-                        tokens[editIndex] = parsed;
-                        _saveLocalTokens();
-                      } else {
-                        tokens.add(parsed);
-                        _saveLocalTokens();
-                      }
+                  if (scanned) return;
+                  final raw = code.text;
+                  if (raw == null || raw.isEmpty) return;
+                  if (!raw.startsWith('otpauth://')) return;
+                  scanned = true;
+                  final parsed = _parseOtpAuth(raw);
+                  if (parsed.isNotEmpty) {
+                    if (editIndex != null) {
+                      tokens[editIndex] = parsed;
+                      _saveLocalTokens();
+                    } else {
+                      tokens.add(parsed);
+                      _saveLocalTokens();
                     }
-                    Navigator.pop(ctx);
                   }
+                  Navigator.pop(ctx);
                 },
               ),
             ),
