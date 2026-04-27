@@ -6,12 +6,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:reloado_auth/l10n/app_localizations.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:local_auth_android/local_auth_android.dart';
+import 'package:local_auth_darwin/local_auth_darwin.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:encrypt/encrypt.dart' as enc;
 import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_zxing/flutter_zxing.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'service_icons.dart';
 
@@ -134,6 +135,9 @@ class _BiometricWrapperState extends State<BiometricWrapper> {
           AndroidAuthMessages(
             signInTitle: loc.biometricTitle,
             biometricHint: loc.biometricHint,
+            cancelButton: loc.cancel,
+          ),
+          IOSAuthMessages(
             cancelButton: loc.cancel,
           ),
         ],
@@ -642,7 +646,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (showAdvanced) ...[
                 Row(children: [
                   Expanded(child: DropdownButtonFormField<String>(
-                    value: algorithm,
+                    initialValue: algorithm,
                     decoration: InputDecoration(labelText: loc.algorithm),
                     items: ['SHA1', 'SHA256', 'SHA512'].map((v) =>
                         DropdownMenuItem(value: v, child: Text(v))).toList(),
@@ -650,7 +654,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   )),
                   const SizedBox(width: 8),
                   Expanded(child: DropdownButtonFormField<String>(
-                    value: digits,
+                    initialValue: digits,
                     decoration: InputDecoration(labelText: loc.digits),
                     items: ['6', '8'].map((v) =>
                         DropdownMenuItem(value: v, child: Text(v))).toList(),
@@ -658,7 +662,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   )),
                   const SizedBox(width: 8),
                   Expanded(child: DropdownButtonFormField<String>(
-                    value: period,
+                    initialValue: period,
                     decoration: InputDecoration(labelText: loc.periodSec),
                     items: ['30', '60'].map((v) =>
                         DropdownMenuItem(value: v, child: Text(v))).toList(),
@@ -703,6 +707,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // ── QR Scanner ──
   void _showQrScanner({int? editIndex}) {
+    final ctrl = MobileScannerController(detectionSpeed: DetectionSpeed.normal);
     bool scanned = false;
 
     showModalBottomSheet(
@@ -711,10 +716,11 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (ctx) => SizedBox(
         height: MediaQuery.of(ctx).size.height * 0.6,
         child: Stack(children: [
-          ReaderWidget(
-            onScan: (code) {
-              if (scanned || !code.isValid || code.text == null) return;
-              final raw = code.text!;
+          MobileScanner(
+            controller: ctrl,
+            onDetect: (capture) {
+              if (scanned) return;
+              final raw = capture.barcodes.firstOrNull?.rawValue ?? '';
               if (raw.startsWith('otpauth://')) {
                 scanned = true;
                 final parsed = _parseOtpAuth(raw);
@@ -749,7 +755,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ]),
       ),
-    );
+    ).whenComplete(() => ctrl.dispose());
   }
 
   // ── Cloud menu ──
