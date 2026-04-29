@@ -1,38 +1,25 @@
 # Reloado Auth
 
-A secure, open-source 2FA (TOTP) authenticator for Android.
+A secure, open-source 2FA (TOTP) authenticator for Android and iOS with online sync and web version.
 
 ## Features
 
 - TOTP code generation (RFC 6238 compatible)
 - QR code scanning to add accounts
-- Biometric lock (fingerprint / face unlock)
-- Encrypted local storage — optional cloud sync
-- German and English UI
+- Biometric lock (fingerprint or face unlock)
+- Encrypted local storage with optional cloud sync and web access
+- English and German UI
 
 ## Privacy
 
 This app stores all data locally on your device using encrypted storage. Optional E2EE cloud sync.
 
-## Build
+## Download
 
-Requires Flutter 3.x.
-
-```bash
-flutter pub get
-flutter build apk --release
-```
-
-For signed release builds, create `android/key.properties`:
-
-```properties
-storeFile=path/to/your.jks
-storePassword=...
-keyAlias=...
-keyPassword=...
-```
-
-If `key.properties` is absent (e.g. F-Droid builds), the app builds with the debug signing config.
+[<img height="40" src=".github/assets/app-store-badge.svg">](https://apps.apple.com/app/id6763278939)
+[<img height="40" src=".github/assets/play-store-badge.png">](https://play.google.com/store/apps/details?id=com.reloado.auth)
+[<img height="40" src=".github/assets/f-droid-badge.png">](https://f-droid.org/packages/com.reloado.auth/)
+[<img height="40" src=".github/assets/web-version.png">](https://auth.reloado.com/)
 
 ## License
 
