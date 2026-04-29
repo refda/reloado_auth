@@ -19,7 +19,7 @@ This app stores all data locally on your device using encrypted storage. Optiona
 [<img height="40" src=".github/assets/app-store-badge.svg">](https://apps.apple.com/app/id6763278939)
 [<img height="40" src=".github/assets/play-store-badge.png">](https://play.google.com/store/apps/details?id=com.reloado.auth)
 [<img height="40" src=".github/assets/f-droid-badge.png">](https://f-droid.org/packages/com.reloado.auth/)
-[<img height="40" src=".github/assets/web-version.png">](https://auth.reloado.com/)
+[<img height="40" src=".github/assets/web.png">](https://auth.reloado.com/)
 
 ## License
 
