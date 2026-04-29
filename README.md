@@ -1,4 +1,7 @@
 # Reloado Auth
+<p align="center">
+<a href="https://auth.reloado.com"><img height="50" src=".github/assets/reloado_auth_logo.svg"></a>
+</p>
 
 A secure, open-source 2FA (TOTP) authenticator for Android and iOS with online sync and web version.
 
