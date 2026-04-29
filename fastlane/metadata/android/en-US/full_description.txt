@@ -1,8 +1,47 @@
-Reloado Auth is an open-source TOTP authenticator for Android.
+Reloado Auth is the only two-factor authenticator you will ever need.
 
-Features:
-* Generate TOTP codes compatible with Google, GitHub, and any RFC 6238 service
-* Scan QR codes to add accounts instantly
-* Biometric lock — protect your codes with fingerprint or face unlock
-* All data stored with encrypted storage
-* Available in English and German
+Built for privacy. Designed for trust. Reloado Auth protects your accounts with end-to-end encrypted cloud backup: Meaning only you can ever access your codes. Not even we can. Zero compromise.
+
+
+END-TO-END ENCRYPTED BACKUP, SYNC & WEB ACCESS
+
+Your 2FA tokens are encrypted in your vault and can be synced seamlessly across all your devices. Access your codes from any browser with full end-to-end encryption intact. Whether you're on your phone, tablet, or a desktop, Reloado Auth has you covered. Your keys. Your data. Always.
+
+
+WORKS OFFLINE — NO ACCOUNT REQUIRED
+
+Generate TOTP and HOTP codes entirely offline. No internet connection needed, no account required. Use Reloado Auth locally for as long as you want (cloud sync is always optional).
+
+
+BIOMETRIC UNLOCK
+
+Your vault stays locked behind biometric authentication. Only your fingerprint or face can open it. Fast, seamless, and secure.
+
+
+INSTANT CODE CAPTURE
+
+Scan a QR code or enter accounts manually in seconds. Tap to copy your code instantly: No more squinting at digits and typing them out.
+
+
+UNIVERSAL COMPATIBILITY & MULTILINGUAL SUPPORT
+
+Reloado Auth supports both TOTP and HOTP standards and works with every major service — Google, GitHub, Microsoft, and any RFC 6238 or RFC 4226 compatible platform. Available on Android, iOS, and Web. Fully localized in English and German.
+
+
+✨ FEATURES AT A GLANCE
+
+- End-to-end encrypted (E2EE) cloud backup
+- Sync across all your devices
+- Web access, Android and iOS version
+- Works 100% offline — no account needed
+- Biometric unlock (fingerprint & face)
+- QR code scanner & manual entry
+- Tap to copy codes instantly
+- Available in English and German
+- Free and open source
+
+
+SUPPORT
+
+Need help or have a feature request? We'd love to hear from you.
+Visit us on GitHub or reach out via our support channels.
