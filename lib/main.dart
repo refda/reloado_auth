@@ -887,6 +887,7 @@ class _QrScannerScreenState extends State<_QrScannerScreen> {
         codeFormat: Format.qrCode,
         tryHarder: true,
         tryRotate: true,
+        showGallery: false,
         scanDelay: const Duration(milliseconds: 100),
         scanDelaySuccess: const Duration(milliseconds: 1000),
         cropPercent: 1.0,
